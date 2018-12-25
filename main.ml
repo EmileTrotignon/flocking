@@ -14,7 +14,7 @@ let x_def = 1920
 let y_def = 1080
 
 let speed = 2.
-let rt = ref 20.
+let rt = ref 40.
 let rc = ref 5.
 
 let bg_color = 0x444444
@@ -22,9 +22,9 @@ let fg_color = ref 0xeeeeee
 
 (* all the following variables should stay in the range [0, 1]. *)
 let conformity_dir = ref 0.9
-let repulsion_attraction_balance = ref 0.95
+let repulsion_attraction_balance = ref 0.97
 let dir_pos_balance = ref 0.95
-let noise_importance = ref 0.00
+let noise_importance = ref 0.01
 
 (* Functions *)
           
