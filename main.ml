@@ -1,7 +1,6 @@
 open Graphics
 open Vector
 open Printf
-open Color
    
 let iof = int_of_float
 let foi = float_of_int
@@ -24,7 +23,7 @@ let fg_color = ref 0xeeeeee
 let conformity_dir = ref 0.9
 let repulsion_attraction_balance = ref 0.97
 let dir_pos_balance = ref 0.95
-let noise_importance = ref 0.01
+let noise_importance = ref 0.1
 
 (* Functions *)
           
@@ -45,12 +44,12 @@ let insert_in_array a e i =
    
 let ncloser_bird b barr n =
   let r = Array.sub barr 0 n in
-  let s_insert b =
+  let s_insert b' =
     let j = ref 1 in
     let bo = ref true in
     while !j < n - 1 || !bo do 
-      if (distance b.pos r.(!j).pos) > (distance b.pos r.(!j + 1).pos) then
-        (insert_in_array r b !j;
+      if (distance b.pos r.(!j).pos) > (distance b'.pos r.(!j + 1).pos) then
+        (insert_in_array r b' !j;
          bo := false);
       j := !j + 1;
     done
@@ -87,24 +86,24 @@ let birds_in_radius b barr rad =
   (Array.sub birp 0 (!i))
     
 let avg_spe barr =
-  let t = Array.fold_left ( +% ) (0., 0.) (Array.map (function {pos = p; spe = s} -> s) barr) in
+  let t = Array.fold_left ( +% ) (0., 0.) (Array.map (function {pos = _; spe = s} -> s) barr) in
   (1. /. (foi (Array.length barr))) *% t
 
 let avg_angle barr = 
-  let t = Array.fold_left ( +. ) 0. (Array.map (function {pos = p; spe = s} -> angle s)
+  let t = Array.fold_left ( +. ) 0. (Array.map (function {pos = _; spe = s} -> angle s)
                                              barr)
   in
     (1. /. (foi (Array.length barr))) *. t
     
 let avg_pos barr =
-  let t = Array.fold_left ( +% ) (0., 0.) (Array.map (function {pos = p; spe = s} -> p) barr) in
+  let t = Array.fold_left ( +% ) (0., 0.) (Array.map (function {pos = p; spe = _} -> p) barr) in
   (1. /. (foi (Array.length barr))) *% t
 
   
 let euler f b =
   {pos = b.pos +% b.spe; spe = b.spe +% f}
 
-let random_bird u =
+let random_bird () =
   {pos = (Random.float (foi x_def), (Random.float (foi y_def)));
    spe = speed *%
            unit_vector ((Random.float 10.) -. 5.,
@@ -113,7 +112,7 @@ let random_bird u =
 let random_bird_array n_birds =
   Array.map random_bird (Array.make n_birds ())
        
-let draw_bird {pos = (x, y); spe = s} =
+let draw_bird {pos = (x, y); spe = _} =
   moveto (iof x) (iof y);
   fill_circle (iof x) (iof y) (iof 3.)
   (*let (sx, sy) = 15. *% (Vector.unit_vector s) in 
@@ -157,6 +156,7 @@ let birds_fly n_birds =
     bird_array := Array.map (next_bird !bird_array) !bird_array;
     i := !i + 1
   done;
+  
 ;;
 open_graph (String.concat "" [" "; (string_of_int x_def); "x"; (string_of_int y_def);]);
 set_color bg_color;

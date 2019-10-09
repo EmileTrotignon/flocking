@@ -43,12 +43,12 @@ let random_march i =
 let random_close i =
   let c = rgb_of_int i in
   {r = 1 + c.r; b = 1 +  c.b; g = 1 + c.g}
-    
+ (*
 let incr_int i =
   let c = rgb_of_int i in
   let [b; g; r] =  incr_list [c.g; c.b; c.r] 256 in
   (int_of_rgb {r=r; b=b; g=g})
-  
+ *)
 let positive_float x y = mod_float (mod_float x y +. y) y
   
 let hsl_of_rgb co =
